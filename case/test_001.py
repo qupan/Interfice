@@ -1,78 +1,77 @@
-# _*_ coding:utf-8 _*_
+# -*- coding:utf-8 -*-
 from base import *
 
-class GetCustomerInfo(unittest.TestCase):
+class TestGetCustomerInfo:
 
-	@classmethod
-	def setUpClass(cls):
-		cls.session=requests.session()
-
-	# @unittest.skip('Debug pass')
-	def test_001_get_eu_info(self):
+	@pytest.mark.ok
+	def test_01(self,s):
 		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[0]
-		resp=self.session.post(url, auth=auth,data=data, headers=headers)
-		self.assertNotIn('<status>E</status>', resp.text)
-		self.assertEqual(200, resp.status_code)
+		resp=s.post(url, auth=auth,data=data, headers=headers)
+		assert 200 == resp.status_code
+		assert '<status>E</status>' not in resp.text
 
-	# @unittest.skip('Debug pass')
-	def test_002_get_in_info(self):
+	@pytest.mark.ok
+	def test_002_get_in_info(self,s):
 		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[1]
-		resp=self.session.post(url, auth=auth,data=data, headers=headers)
-		self.assertNotIn('<status>E</status>', resp.text)
+		resp=s.post(url, auth=auth,data=data, headers=headers)
+		assert 200 == resp.status_code
+		assert '<status>E</status>' not in resp.text
 
-	# @unittest.skip('Debug pass')
-	def test_003_get_na_info(self):
+	@pytest.mark.ok
+	def test_003_get_na_info(self,s):
 		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[2]
-		resp=self.session.post(url, auth=auth,data=data, headers=headers)
-		self.assertNotIn('<status>E</status>', resp.text)
+		resp=s.post(url, auth=auth,data=data, headers=headers)
+		assert 200 == resp.status_code
+		assert '<status>E</status>' not in resp.text
 
-	# @unittest.skip('Debug pass')
-	def test_004_get_it_info(self):
+	@pytest.mark.ok
+	def test_004_get_it_info(self,s):
 		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[3]
-		resp=self.session.post(url, auth=auth,data=data, headers=headers)
-		self.assertNotIn('<status>E</status>', resp.text)
+		resp=s.post(url, auth=auth,data=data, headers=headers)
+		assert 200 == resp.status_code
+		assert '<status>E</status>' not in resp.text
 
-	# @unittest.skip('Debug pass')
-	def test_005_vkorg_vtweg_long_input(self):
+	@pytest.mark.ok
+	def test_005_vkorg_vtweg_long_input(self,s):
 		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[4]
-		resp=self.session.post(url, auth=auth,data=data, headers=headers)
-		self.assertNotIn('<status>E</status>', resp.text)
+		resp=s.post(url, auth=auth,data=data, headers=headers)
+		assert 200 == resp.status_code
+		assert '<status>E</status>' not in resp.text
 
-	# @unittest.skip('Debug pass')
-	def test_006_kunnr_long_input(self):
+	@pytest.mark.ok
+	def test_006_kunnr_long_input(self,s):
 		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[5]
-		resp=self.session.post(url, auth=auth,data=data, headers=headers)
-		self.assertIn('<status>E</status>', resp.text)
+		resp=s.post(url, auth=auth,data=data, headers=headers)
+		assert 200 == resp.status_code
+		assert '<status>E</status>' in resp.text
 
-	# @unittest.skip('Debug pass')
-	def test_007_vkorg_null(self):
+	@pytest.mark.ok
+	def test_007_vkorg_null(self,s):
 		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[6]
-		resp=self.session.post(url, auth=auth,data=data, headers=headers)
-		self.assertIn('Sales organization or distribution channel cannot be empty', resp.text)
+		resp=s.post(url, auth=auth,data=data, headers=headers)
+		assert 200 == resp.status_code
+		assert 'Sales organization or distribution channel cannot be empty' in resp.text
 
-	# @unittest.skip('Debug pass')
-	def test_008_vtweg_null(self):
+	@pytest.mark.ok
+	def test_008_vtweg_null(self,s):
 		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[7]
-		resp=self.session.post(url, auth=auth,data=data, headers=headers)
-		self.assertIn('Sales organization or distribution channel cannot be empty', resp.text)
+		resp=s.post(url, auth=auth,data=data, headers=headers)
+		assert 200 == resp.status_code
+		assert 'Sales organization or distribution channel cannot be empty' in resp.text
 
-	# @unittest.skip('Debug pass')
-	def test_009_kunnr_null(self):
+	@pytest.mark.ok
+	def test_009_kunnr_null(self,s):
 		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[8]
-		resp=self.session.post(url, auth=auth,data=data, headers=headers)
-		self.assertIn('ns0:MT_GET_CUSTOMERINFO_RESP', resp.text)
-		self.assertEqual(200, resp.status_code)
+		resp=s.post(url, auth=auth,data=data, headers=headers)
+		assert 200 == resp.status_code
+		assert 'ns0:MT_GET_CUSTOMERINFO_RESP' in resp.text
 
-	# @unittest.skip('Debug pass')
-	def test_010_not_exist_user(self):
+	@pytest.mark.ok
+	def test_010_not_exist_user(self,s):
 		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[9]
-		resp=self.session.post(url, auth=auth,data=data, headers=headers)
-		self.assertIn('ns0:MT_GET_CUSTOMERINFO_RESP', resp.text)
-		self.assertEqual(200, resp.status_code)
+		resp=s.post(url, auth=auth,data=data, headers=headers)
+		assert 200 == resp.status_code
+		assert 'ns0:MT_GET_CUSTOMERINFO_RESP' in resp.text
 
-	@classmethod
-	def tearDownClass(cls):
-		cls.session.close()
-
-if __name__=="__main__":
-	unittest.main()
+if __name__=='__main__':
+	pytest.main(['-v','-m','ok','test_001.py',])
