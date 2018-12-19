@@ -2,76 +2,30 @@
 from base import *
 
 class TestGetCustomerInfo:
+	'''接口'''
 
+	@pytest.mark.parametrize('data,code,msg',data_01[0])
 	@pytest.mark.ok
-	def test_01(self,s):
-		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[0]
+	def test_01(self,s,data,code,msg):
 		resp=s.post(url, auth=auth,data=data, headers=headers)
-		assert 200 == resp.status_code
-		assert '<status>E</status>' not in resp.text
+		assert code == resp.status_code
+		assert msg  not in resp.text
 
+	@pytest.mark.parametrize('data,code,msg',data_01[1])
 	@pytest.mark.ok
-	def test_002_get_in_info(self,s):
-		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[1]
+	def test_02(self,s,data,code,msg):
 		resp=s.post(url, auth=auth,data=data, headers=headers)
-		assert 200 == resp.status_code
-		assert '<status>E</status>' not in resp.text
+		assert code == resp.status_code
+		assert msg in resp.text
 
+	@pytest.mark.parametrize('data,code,msg',data_01[2])
 	@pytest.mark.ok
-	def test_003_get_na_info(self,s):
-		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[2]
+	def test_03(self,s,data,code,msg):
+		'''处理特殊逻辑'''
 		resp=s.post(url, auth=auth,data=data, headers=headers)
-		assert 200 == resp.status_code
-		assert '<status>E</status>' not in resp.text
-
-	@pytest.mark.ok
-	def test_004_get_it_info(self,s):
-		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[3]
-		resp=s.post(url, auth=auth,data=data, headers=headers)
-		assert 200 == resp.status_code
-		assert '<status>E</status>' not in resp.text
-
-	@pytest.mark.ok
-	def test_005_vkorg_vtweg_long_input(self,s):
-		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[4]
-		resp=s.post(url, auth=auth,data=data, headers=headers)
-		assert 200 == resp.status_code
-		assert '<status>E</status>' not in resp.text
-
-	@pytest.mark.ok
-	def test_006_kunnr_long_input(self,s):
-		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[5]
-		resp=s.post(url, auth=auth,data=data, headers=headers)
-		assert 200 == resp.status_code
-		assert '<status>E</status>' in resp.text
-
-	@pytest.mark.ok
-	def test_007_vkorg_null(self,s):
-		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[6]
-		resp=s.post(url, auth=auth,data=data, headers=headers)
-		assert 200 == resp.status_code
-		assert 'Sales organization or distribution channel cannot be empty' in resp.text
-
-	@pytest.mark.ok
-	def test_008_vtweg_null(self,s):
-		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[7]
-		resp=s.post(url, auth=auth,data=data, headers=headers)
-		assert 200 == resp.status_code
-		assert 'Sales organization or distribution channel cannot be empty' in resp.text
-
-	@pytest.mark.ok
-	def test_009_kunnr_null(self,s):
-		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[8]
-		resp=s.post(url, auth=auth,data=data, headers=headers)
-		assert 200 == resp.status_code
-		assert 'ns0:MT_GET_CUSTOMERINFO_RESP' in resp.text
-
-	@pytest.mark.ok
-	def test_010_not_exist_user(self,s):
-		data=GET_CUSTOMERINFO_DATA%GET_CUSTOMERINFO_list[9]
-		resp=s.post(url, auth=auth,data=data, headers=headers)
-		assert 200 == resp.status_code
-		assert 'ns0:MT_GET_CUSTOMERINFO_RESP' in resp.text
+		shipto=re.findall(r'<SHIPTO_ID>(.*?)</SHIPTO_ID>', resp.text, re.S|re.M)[0]
+		assert 560000 <= int(shipto) <= 5999999
+		assert msg  not in resp.text
 
 if __name__=='__main__':
-	pytest.main(['-v','-m','ok','test_001.py',])
+	pytest.main(['-q','-m','ok','test_01GetCustomerInfo.py',])
